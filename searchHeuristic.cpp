@@ -12,6 +12,14 @@ using std::string;
 using std::vector;
 using std::abs;
 
+/*
+ A node contains {x, y, g, h}
+ x - the x-cordinates
+ y - the y-cordinates
+ g - the distance from the start point to the current step
+ h - the expected distance ti the destination
+*/
+
 enum class State {kEmpty, kObstacle, kClosed};
 
 
@@ -71,6 +79,18 @@ vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[
 
   cout << "No path found! \n";
   return vector<vector<State>> {};
+}
+
+bool Compare(vector<int> a, vector<int> b) {
+  /* we need to get the f-value which is the sum of g+h
+  * g-value is the distance from start node to the current step
+  * h-value is the expected distance
+  */
+
+  int fValue = a[2] + a[3];
+  int f2Value = b[2] + b[3];
+
+  return fValue > f2Value;
 }
 
 string CellString(State cell) {

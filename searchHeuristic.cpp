@@ -12,7 +12,7 @@ using std::string;
 using std::vector;
 using std::abs;
 
-enum class State {kEmpty, kObstacle};
+enum class State {kEmpty, kObstacle, kClosed};
 
 
 vector<State> ParseLine(string line) {
@@ -59,6 +59,12 @@ vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[
   return vector<vector<State>> {};
 }
 
+// This function adds the x, y coordinates to the openList and set the coordinates to close
+void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openList, vector<vector<State>> &grid) {
+  vector<int> node = {x, y, g, h};
+  openList.push_back(node);
+  grid[x][y] = State::kClosed;
+}
 
 string CellString(State cell) {
   switch(cell) {

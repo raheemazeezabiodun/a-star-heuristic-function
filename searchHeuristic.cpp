@@ -52,18 +52,25 @@ int Heuristic(int x1, int y1, int x2, int y2) {
   return abs(x2 - x1) + abs(y2 - y1);
 }
 
-
-vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[2]) {
-  cout << "No path found! \n";
-
-  return vector<vector<State>> {};
-}
-
 // This function adds the x, y coordinates to the openList and set the coordinates to close
 void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openList, vector<vector<State>> &grid) {
   vector<int> node = {x, y, g, h};
   openList.push_back(node);
   grid[x][y] = State::kClosed;
+}
+
+vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[2]) {
+  vector<vector<int>> open {};
+
+  int x = init[0];
+  int y = init[1];
+
+  int g = 0;
+  int h = Heuristic(x, y, goal[0], goal[1]);
+  AddToOpen(x, y, g, h, open, grid);
+
+  cout << "No path found! \n";
+  return vector<vector<State>> {};
 }
 
 string CellString(State cell) {

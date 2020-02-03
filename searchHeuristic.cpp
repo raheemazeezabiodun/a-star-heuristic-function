@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <algorithm>
 
 using std::cout;
 using std::ifstream;
@@ -11,6 +11,7 @@ using std::istringstream;
 using std::string;
 using std::vector;
 using std::abs;
+using std::sort;
 
 /*
  A node contains {x, y, g, h}
@@ -20,7 +21,7 @@ using std::abs;
  h - the expected distance ti the destination
 */
 
-enum class State {kEmpty, kObstacle, kClosed};
+enum class State {kEmpty, kObstacle, kClosed, KPath};
 
 
 vector<State> ParseLine(string line) {
@@ -67,6 +68,9 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openList, vector
   grid[x][y] = State::kClosed;
 }
 
+/*
+* Implementation of A* search algorithm
+*/
 vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[2]) {
   vector<vector<int>> open {};
 
@@ -76,6 +80,24 @@ vector<vector<State>> Search (vector<vector<State>> grid, int init[2], int goal[
   int g = 0;
   int h = Heuristic(x, y, goal[0], goal[1]);
   AddToOpen(x, y, g, h, open, grid);
+
+  while (open.size() > 0) {
+    // Get the next node
+    CellSort(&open);
+    auto current = open.back();
+    open.pop_back();
+    x = current[0];
+    y = current[1];
+    grid[x][y] = State::KPath;
+
+    // Check if we're done.
+    if (x == goal[0] && y == goal[1]) {
+      return grid;
+    }
+    
+    // If we're not done, expand search to current node's neighbors.
+    // ExpandNeighbors
+  }
 
   cout << "No path found! \n";
   return vector<vector<State>> {};
@@ -91,6 +113,13 @@ bool Compare(vector<int> a, vector<int> b) {
   int f2Value = b[2] + b[3];
 
   return fValue > f2Value;
+}
+
+/**
+ * Sort the two-dimensional vector of ints in descending order.
+ */
+void CellSort(vector<vector<int>> *v) {
+  sort(v->begin(), v->end(), Compare);
 }
 
 string CellString(State cell) {

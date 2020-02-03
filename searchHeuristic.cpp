@@ -130,6 +130,17 @@ string CellString(State cell) {
 }
 
 
+bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
+  bool on_grid_x = x > 0 && x < grid.size();
+  bool on_grid_y = y > 0 && y < grid[0].size();
+
+  if (on_grid_x && on_grid_y) {
+    return grid[x][y] == State::kEmpty;
+  }
+  return false;
+}
+
+
 void PrintBoard(const vector<vector<State>> board) {
   for (int i = 0; i < board.size(); i++) {
     for (int j = 0; j < board[i].size(); j++) {
